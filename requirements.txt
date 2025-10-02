@@ -1,0 +1,6 @@
+numpy>=1.24
+Pillow>=10.0
+huggingface-hub>=0.24
+torch>=2.1
+torchvision>=0.16
+depth-pro @ git+https://github.com/apple/ml-depth-pro.git
