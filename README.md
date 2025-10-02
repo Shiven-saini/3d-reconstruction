@@ -1,6 +1,6 @@
 # Depth Pro Inference Toolkit
 
-This project wraps Apple’s [Depth Pro](https://huggingface.co/apple/DepthPro) monocular depth model in a modular Python toolkit. It can download the checkpoint, run inference on single images or batches, and export aligned RGB-D assets including:
+This project uses a monocular depth model in a modular Python toolkit. It can download the checkpoint, run inference on single images or batches, and export aligned RGB-D assets including:
 
 - Metric depth maps (`*.png` and `*.npy`)
 - Dense RGB point clouds (`*.ply` in ASCII format)
