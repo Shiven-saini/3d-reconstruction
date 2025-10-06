@@ -1,5 +1,9 @@
 # Ignoring weights
 models/
 
+# Ignoring Python cache files
+__pycache__/
+
+
 # Ignoring outputs
 outputs/
