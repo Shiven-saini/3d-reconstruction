@@ -4,3 +4,4 @@ huggingface-hub>=0.24
 torch>=2.1
 torchvision>=0.16
 depth-pro @ git+https://github.com/apple/ml-depth-pro.git
+segment-anything @ git+https://github.com/facebookresearch/segment-anything.git

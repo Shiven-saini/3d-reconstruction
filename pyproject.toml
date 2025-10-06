@@ -9,9 +9,11 @@ dependencies = [
     "huggingface-hub>=0.24",
     "numpy>=1.24",
     "pillow>=10.0",
+    "segment-anything",
     "torch>=2.1",
     "torchvision>=0.16",
 ]
 
 [tool.uv.sources]
 depth-pro = { git = "https://github.com/apple/ml-depth-pro.git" }
+segment-anything = { git = "https://github.com/facebookresearch/segment-anything.git" }
