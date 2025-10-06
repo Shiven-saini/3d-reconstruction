@@ -1,7 +1,3 @@
-"""Inference wrapper for Apple Depth Pro."""
-
-from __future__ import annotations
-
 import logging
 from dataclasses import dataclass
 from pathlib import Path
@@ -34,7 +30,6 @@ class InferenceResult:
     depth_numpy_path: Path
     point_cloud_path: Path
     focal_length_px: float
-    sky_removed_path: Optional[Path] = None
 
 
 class DepthProInference:
@@ -45,9 +40,6 @@ class DepthProInference:
         cache_dir: Path | str = Path("./models/depth_pro"),
         device: Optional[str | torch.device] = None,
         precision: str = "float32",
-        enable_sky_removal: bool = True,
-        sam_model_type: str = "vit_b",
-        sam_cache_dir: Optional[Path | str] = None,
     ) -> None:
         self.cache_dir = Path(cache_dir)
         self.device = torch.device(device) if device is not None else None
@@ -58,10 +50,6 @@ class DepthProInference:
             precision=self.precision,
         )
         self.device = next(self.model.parameters()).device
-        self.enable_sky_removal = enable_sky_removal
-        self.sam_model_type = sam_model_type
-        self.sam_cache_dir = Path(sam_cache_dir) if sam_cache_dir is not None else Path("./models/sam")
-        self._sky_remover = None
 
     def predict_single(
         self,
@@ -75,24 +63,7 @@ class DepthProInference:
         output_dir.mkdir(parents=True, exist_ok=True)
 
         rgb, f_px_from_meta = load_rgb_image(image_path)
-        sky_removed_path: Optional[Path] = None
         processed_rgb = rgb.copy()
-
-        if self.enable_sky_removal:
-            if self._sky_remover is None:
-                from .sam_sky import SamSkyRemover
-
-                self._sky_remover = SamSkyRemover(
-                    cache_dir=self.sam_cache_dir,
-                    model_type=self.sam_model_type,
-                    device=self.device,
-                )
-
-            sky_result = self._sky_remover.remove_sky(processed_rgb.astype(np.uint8))
-            if sky_result.mask is not None:
-                processed_rgb = sky_result.masked_image
-                sky_removed_path = output_dir / f"{image_path.stem}_sky_removed.png"
-                Image.fromarray(processed_rgb).save(sky_removed_path)
 
         tensor = self.transform(processed_rgb)
         tensor = tensor.to(self.device)
@@ -130,7 +101,6 @@ class DepthProInference:
             depth_numpy_path=depth_numpy_path,
             point_cloud_path=point_cloud_path,
             focal_length_px=focal_length_px,
-            sky_removed_path=sky_removed_path,
         )
 
     def predict_batch(
