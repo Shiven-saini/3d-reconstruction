@@ -5,6 +5,10 @@ This project uses a monocular depth model in a modular Python toolkit. It can ru
 - Metric depth maps (`*.png` and `*.npy`)
 - Dense RGB point clouds (`*.ply` in ASCII format)
 
+<p align="center">
+  <img src="assets/demo.png" alt="Demo" />
+</p>
+
 All outputs are generated per input image and stored under an output directory you choose.
 
 ## Requirements
